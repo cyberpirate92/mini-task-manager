@@ -1,0 +1,31 @@
+<div class="card mt-3" *ngIf="!isLoading; else Loader">
+    <div class="card-header text-muted">
+        <span class="text-primary">Header</span>
+        <span class="float-right"><i class="fa fa-trash text-muted action-icon" (click)="deleteSelf()"></i></span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{ taskItem.message }}</h5>
+        <details>
+            <summary>Debug</summary>
+            <pre><code>{{ taskItem | json }}</code></pre>
+        </details>
+    </div>
+    <div class="card-footer text-muted">
+        <span class="text-primary" *ngIf="taskItem.assigned_name; else NoAssignedName">{{ taskItem.assigned_name }}</span>
+        <span class="float-right" *ngIf="taskItem.due_date; else NoDueDate"> {{ taskItem.due_date | dateFormat }} </span>
+    </div>
+</div>
+<ng-template #NoAssignedName>
+    <span class="text-muted">Unassigned</span>
+</ng-template>
+<ng-template #NoDueDate>
+    <span class="float-right">No Due Date</span>
+</ng-template>
+<ng-template #Loader>
+    <div class="card">
+        <div class="card-body text-center">
+            <i class="fa fa-spinner fa-spin text-muted"></i>
+            <p class="text-muted">Please wait</p>
+        </div>
+    </div>
+</ng-template>
