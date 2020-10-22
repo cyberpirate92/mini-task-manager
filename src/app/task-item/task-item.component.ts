@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TaskItem } from '../models';
 import { TaskManagerService } from '../services/task-manager.service';
 
@@ -7,16 +7,23 @@ import { TaskManagerService } from '../services/task-manager.service';
     templateUrl: './task-item.component.html',
     styleUrls: ['./task-item.component.scss']
 })
-export class TaskItemComponent {
+export class TaskItemComponent implements OnInit {
 
     @Input() taskItem: TaskItem;
     @Output() onDelete: EventEmitter<TaskItem>;
 
     public isLoading: boolean;
+    public isOverdue: boolean;
     
     constructor(private taskManager: TaskManagerService) { 
         this.onDelete = new EventEmitter();
         this.isLoading = false;
+        this.isOverdue = false;
+    }
+
+    public ngOnInit(): void {
+        const now = new Date();
+        this.isOverdue = this.taskItem.due_date < now;
     }
     
     public deleteSelf() {

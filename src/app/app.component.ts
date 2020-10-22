@@ -19,16 +19,16 @@ export class AppComponent implements OnInit, OnDestroy {
     public destroy$: Subject<any>;
     
     public boards: TaskBoard[] = [{
-        title: 'Low Priority',
-        priority: 3,
+        title: 'High Priority',
+        priority: 1,
         items: [],
-    }, {
+    },{
         title: 'Medium Priority',
         priority: 2,
         items: [],
-    }, {
-        title: 'High Priority',
-        priority: 1,
+    },{
+        title: 'Low Priority',
+        priority: 3,
         items: [],
     }];
     
@@ -36,14 +36,17 @@ export class AppComponent implements OnInit, OnDestroy {
         this.destroy$ = new Subject();
         this.searchTerm = '';
         this.users = [];
+        this.isLoading = true;
     }
     
     public ngOnInit(): void {
         forkJoin([this.userService.fetchAll(), this.taskService.fetchAll()]).subscribe({
-            next: resultArray => {
+            next: _ => {
                 this.initializeSubscriptions();
             }, error: error => {
                 console.error('Initializion failed', error);
+            }, complete: () => {
+                this.isLoading = false;
             }
         });
     }
@@ -66,10 +69,6 @@ export class AppComponent implements OnInit, OnDestroy {
                     }
                 });
             }
-        });
-        
-        this.taskService.isLoading$.pipe(takeUntil(this.destroy$)).subscribe({
-            next: value => this.isLoading = value
         });
     }
     

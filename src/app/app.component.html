@@ -1,10 +1,22 @@
 <div class="container-fluid h-100">
-    <div class="row h-100">
-        <div class="col-12">
-            <input type="text" spellcheck="false" autocomplete="false" [(ngModel)]="searchTerm" placeholder="Enter term to search" class="form-control"/>
+    <ng-container *ngIf="!isLoading; else LoadingScreen">
+        <div class="row mt-4">      
+            <div class="col-12">
+                <div class="form-group">
+                    <input type="text" spellcheck="false" autocomplete="false" [(ngModel)]="searchTerm" placeholder="Enter term to search" class="form-control form-control-lg"/>
+                </div>
+            </div>
         </div>
-        <ng-container *ngFor="let board of boards">
-            <app-task-board class="col-4" [boardConfig]="board" [filterTerm]="searchTerm"></app-task-board>
-        </ng-container>
-    </div>
+        <div class="row mt-4">
+            <ng-container *ngFor="let board of boards">
+                <app-task-board class="col-4" [boardConfig]="board" [filterTerm]="searchTerm"></app-task-board>
+            </ng-container>
+        </div>
+    </ng-container>
 </div>
+<ng-template #LoadingScreen>
+    <div class="col-12 text-center text-light mt-4">
+        <p class="mt-4"><i class="fa fa-spin fa-spinner fa-3x"></i></p>
+        <p class="h3">Loading tasks, please wait</p>
+    </div>
+</ng-template>

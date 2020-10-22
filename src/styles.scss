@@ -1,7 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 body, html {
     height: 100vh;
+    font-size: 0.9rem;
 }
 body {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Mulish', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background: linear-gradient(90deg, rgba(15,150,218,0.9037990196078431) 0%, rgba(0,20,255,0.7133228291316527) 100%);
+}
+.action {
+    cursor: pointer;
+    font-size: 1rem;
 }

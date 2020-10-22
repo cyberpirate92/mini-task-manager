@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { GenericResponse, TaskItem, TaskListResponse } from '../models';
 import { DateUtils } from '../utils/date-utils';
@@ -15,7 +15,6 @@ export class TaskManagerService {
     
     public tasks$: BehaviorSubject<TaskItem[]>;
     public error$: BehaviorSubject<string>;
-    public isLoading$: BehaviorSubject<boolean>;
     
     constructor(private httpClient: HttpClient) { 
         this.API_URL = environment.apiUrl;
@@ -23,7 +22,6 @@ export class TaskManagerService {
         
         this.tasks$ = new BehaviorSubject([]);
         this.error$ = new BehaviorSubject("");
-        this.isLoading$ = new BehaviorSubject(false);
     }
     
     /**
@@ -31,7 +29,6 @@ export class TaskManagerService {
     * `tasks$` will be updated with the results.
     */
     public fetchAll() {
-        this.isLoading$.next(true);
         return this.httpClient.get<TaskListResponse>(`${this.API_URL}/list`, {
             headers: {
                 AuthToken: this.API_KEY,
@@ -54,7 +51,6 @@ export class TaskManagerService {
                 console.error(error);
                 this.error$.next(error.message);
             },
-            complete: () => this.isLoading$.next(false),
         }));
     }
     

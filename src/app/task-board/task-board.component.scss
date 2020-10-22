@@ -1,19 +1,18 @@
 :host {
     height: 100%;
 }
-.title {
-    font-weight: bold;
-    text-align: center;
-    padding: 0.5rem;
-    background-color: rgba(225, 225, 225, 0.75);
-}
 .board-outline {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    height: 100%;
     overflow-y: scroll;
     overflow-x: auto;
-    border-left: 1px solid #222;
-    // box-shadow: 0 0 5px 0px #000;
-    // border: 2px solid black;
+}
+.action {
+    .action-danger:hover {
+        color: red;
+    }
+}
+.card-header {
+    font-weight: 1rem;
+}
+.task-board {
+    box-shadow: 0 0 10px 0 #333;
 }
