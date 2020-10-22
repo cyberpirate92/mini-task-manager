@@ -6,9 +6,10 @@ import { AppComponent } from './app.component';
 import { TaskBoardComponent } from './task-board/task-board.component';
 import { TaskItemComponent } from './task-item/task-item.component';
 import { DateFormatPipe } from './pipes/date-format.pipe';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaskFilterPipe } from './pipes/task-filter.pipe';
 import { PadPipe } from './pipes/pad.pipe';
+import { TaskItemEditComponent } from './task-item-edit/task-item-edit.component';
 
 @NgModule({
     declarations: [
@@ -18,11 +19,13 @@ import { PadPipe } from './pipes/pad.pipe';
         DateFormatPipe,
         TaskFilterPipe,
         PadPipe,
+        TaskItemEditComponent,
     ],
     imports: [
         BrowserModule,
         HttpClientModule,
         FormsModule,
+        ReactiveFormsModule,
     ],
     providers: [TaskFilterPipe],
     bootstrap: [AppComponent]

@@ -11,7 +11,7 @@
         <div class="row mt-4">
             <ng-container *ngFor="let board of boards">
                 <app-task-board 
-                    class="col" 
+                    class="col-md-4" 
                     [title]="board.title" 
                     [priority]="board.priority" 
                     [filterTerm]="searchTerm">

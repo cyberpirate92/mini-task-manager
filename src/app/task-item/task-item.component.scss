@@ -4,27 +4,6 @@
 .icon-danger:hover {
     color: theme-color("danger");
 }
-.task-card {
-    box-shadow: 0 0 2px 0 #444;
-    transition: all .2s ease-in-out;
-    border-left-width: 5px;
-    border-left-color: cornflowerblue;
-    cursor: pointer;
-    background-color: #f7f7f7;
-
-    .user-avatar {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-    }
-}
-.task-card.overdue {
-    border-left-color: deeppink;
-}
-.task-card:hover {
-    box-shadow: 0 0 4px 0 #000;
-    background-color: #fff;
-}
 .action-pane {
     top: 0;
     right: 0;
@@ -33,7 +12,6 @@
     visibility: hidden;
     position: absolute;
 }
-
 .task-card:hover .action-pane {
     visibility: visible;
 }

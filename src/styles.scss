@@ -25,3 +25,27 @@ body {
 .font-weight-semi-bold {
     font-weight: 600;
 }
+.task-card {
+    box-shadow: 0 0 2px 0 #444;
+    transition: all .2s ease-in-out;
+    border-left-width: 5px;
+    border-left-color: cornflowerblue;
+    cursor: pointer;
+    background-color: #f7f7f7;
+    
+    .display-picture {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+    }
+}
+.task-card.overdue {
+    border-left-color: deeppink;
+}
+.task-card.editing {
+    border-left-color: #fff700;
+}
+.task-card:hover {
+    box-shadow: 0 0 4px 0 #000;
+    background-color: #fff;
+}

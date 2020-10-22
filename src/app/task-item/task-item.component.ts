@@ -52,4 +52,8 @@ export class TaskItemComponent implements OnInit, OnChanges {
         event.dataTransfer.setData('task', JSON.stringify(this.taskItem));
         event.dataTransfer.dropEffect = 'move';
     }
+
+    public onDragComplete(event: DragEvent) {
+        console.log(event);
+    }
 }

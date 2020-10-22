@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TaskItem } from '../models';
@@ -19,11 +19,13 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     public destroy$: Subject<any>;
     public tasks: TaskItem[];
     public filteredTasks: TaskItem[];
+    public showCreateTaskCard: boolean;
     
     constructor(private taskFilterPipe: TaskFilterPipe, private taskManager: TaskManagerService) { 
         this.filteredTasks = [];
         this.destroy$ = new Subject();
         this.tasks = [];
+        this.showCreateTaskCard = false;
     }
     
     public ngOnInit(): void {
@@ -64,7 +66,15 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     }
     
     public newTask(): void {
-        // TODO: Implementation
+        this.showCreateTaskCard = true;
+    }
+
+    public createTask(task: TaskItem): void {
+        this.taskManager.createTask(task).subscribe({
+            next: _ => {
+                this.showCreateTaskCard = false;
+            }
+        });
     }
     
     public ngOnDestroy(): void {

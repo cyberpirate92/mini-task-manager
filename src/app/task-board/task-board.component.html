@@ -6,13 +6,18 @@
                     {{ filteredTasks.length | pad }}
                 </span>
                 <span class="board-title h5">
-                    {{ title }} 
+                    {{ title }}
                 </span> 
                 <div class="float-right action">
                     <i class="fa fa-plus" (click)="newTask()"></i>
                 </div>
             </div>
             <div class="card-body" (dragover)="$event.preventDefault()" (drop)="onDropped($event)">
+                <app-task-item-edit *ngIf="showCreateTaskCard" 
+                    (onSave)="createTask($event)" 
+                    (onCancel)="showCreateTaskCard = false" 
+                    [priority]="priority">
+                </app-task-item-edit>
                 <ng-container *ngFor="let task of filteredTasks">
                     <app-task-item [taskItem]="task"></app-task-item>
                 </ng-container>

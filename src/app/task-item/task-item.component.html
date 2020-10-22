@@ -1,4 +1,4 @@
-<div class="card task-card mt-3" [ngClass]="{ 'overdue' : isOverdue }" draggable="true" (dragstart)="onDragStart($event)">
+<div class="card task-card mt-3" [ngClass]="{ 'overdue' : isOverdue }" draggable="true" (dragstart)="onDragStart($event)" (dragend)="onDragComplete($event)">
     <div class="card-body" *ngIf="!isLoading; else Loader">
         <div class="card-title">
             <span class="h5">{{ taskItem.message }}</span>
@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col">
                     <ng-container *ngIf="taskItem.assigned_name; else NoAssignedName">
-                        <img [src]="userDisplayPicture" class="user-avatar d-inline-block" />
+                        <img [src]="userDisplayPicture" class="display-picture d-inline-block" />
                         <div class="text-muted font-weight-semi-bold ml-2 d-inline-block" *ngIf="taskItem.assigned_name">{{ taskItem.assigned_name }}</div>
                     </ng-container>
                 </div>
@@ -16,13 +16,15 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="col-12">
+            <details>
+                <summary>Debug</summary>
+                <pre><code>{{ taskItem | json }}</code></pre>
+            </details>
+        </div> -->
         <div class="action-pane">
             <i class="fa fa-trash action" title="Delete this task" (click)="deleteSelf()"></i>
         </div>
-        <!-- <details>
-            <summary>Debug</summary>
-            <pre><code>{{ taskItem | json }}</code></pre>
-        </details> -->
     </div>
 </div>
 <ng-template #NoAssignedName>

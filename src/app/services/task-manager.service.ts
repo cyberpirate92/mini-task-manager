@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { GenericResponse, TaskItem, TaskListResponse } from '../models';
+import { CreateTaskResponse, GenericResponse, TaskItem, TaskListResponse } from '../models';
 import { DateUtils } from '../utils/date-utils';
 
 @Injectable({
@@ -53,6 +53,35 @@ export class TaskManagerService {
                 console.error(error);
                 this.error$.next(error.message);
             },
+        }));
+    }
+
+    /**
+     * Create task with provided values
+     * @param task The task to be created
+     * 
+     * @returns Observable with the response object
+     */
+    public createTask(task: TaskItem) {
+        let requestBody = new FormData();
+        requestBody.set('message', task.message);
+        requestBody.set('priority', task.priority?.toString() || '');
+        requestBody.set('due_date', DateUtils.toRequestFormat(task.due_date) || '');
+        requestBody.set('assigned_to', task.assigned_to?.toString() || '');
+
+        return this.httpClient.post<CreateTaskResponse>(`${this.API_URL}/create`, requestBody, {
+            headers: {
+                AuthToken: this.API_KEY,
+            }
+        }).pipe(tap({
+            next: response => {
+                if (response.status === 'success') {
+                    task.id = response.taskid;
+                    this.tasks$.next([task, ...this.tasks$.getValue()]);
+                } else {
+                    console.error('Task creation failed', response.error || response.message || 'Unknown error');
+                }
+            }
         }));
     }
 
