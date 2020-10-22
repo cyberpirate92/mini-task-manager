@@ -10,7 +10,12 @@
         </div>
         <div class="row mt-4">
             <ng-container *ngFor="let board of boards">
-                <app-task-board class="col" [boardConfig]="board" [filterTerm]="searchTerm" (onTaskDropped)="handleDrop($event)"></app-task-board>
+                <app-task-board 
+                    class="col" 
+                    [title]="board.title" 
+                    [priority]="board.priority" 
+                    [filterTerm]="searchTerm">
+                </app-task-board>
             </ng-container>
         </div>
     </ng-container>

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TaskBoard, TaskDropEvent } from './models';
@@ -20,15 +21,12 @@ export class AppComponent implements OnInit, OnDestroy {
     public boards: TaskBoard[] = [{
         title: 'High Priority',
         priority: 1,
-        items: [],
     },{
         title: 'Medium Priority',
         priority: 2,
-        items: [],
     },{
         title: 'Low Priority',
         priority: 3,
-        items: [],
     }];
     
     constructor(private taskService: TaskManagerService, private userService: UsersService) {
@@ -41,32 +39,11 @@ export class AppComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         forkJoin([this.userService.fetchAll(), this.taskService.fetchAll()]).subscribe({
             next: _ => {
-                this.initializeSubscriptions();
+                // TODO: remove
             }, error: error => {
                 console.error('Initializion failed', error);
             }, complete: () => {
                 this.isLoading = false;
-            }
-        });
-    }
-    
-    public initializeSubscriptions(): void {
-        this.userService.users$.pipe(takeUntil(this.destroy$)).subscribe({
-            next: userList => this.users = userList,
-        });
-        
-        this.taskService.tasks$.pipe(takeUntil(this.destroy$)).subscribe({
-            next: tasks => {
-                console.log(tasks);
-                this.boards.forEach(board => board.items = []);
-                tasks.forEach(task => {
-                    let board = this.boards.find(board => board.priority === task.priority);
-                    if (board) {
-                        board.items.push(task);
-                    } else {
-                        console.warn(`No board found for priority ${task.priority}`);
-                    }
-                });
             }
         });
     }
