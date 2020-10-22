@@ -1,3 +1,5 @@
+import { StringUtils } from './string-utils';
+
 export class DateUtils {
 
     private static monthNames = [
@@ -44,15 +46,16 @@ export class DateUtils {
     /**
      * Convert given date object to the display format `dd MMM yyyy hh:mm`
      * @param date The date object to convert
+     * @param shouldIncludeTime Should the formatted string contain time?
      * 
-     * @returns Given date in Display format
+     * @returns Date in Display format
      */
-    public static toDisplayFormat(date: Date): string {
+    public static toDisplayFormat(date: Date, shouldIncludeTime = true): string {
         if (!this.isDate(date)) {
             return 'err';
         }
-        const displayDate = `${date.getDate()} ${this.monthNames[date.getMonth()].substr(0, 3)} ${date.getFullYear()}`;
+        const displayDate = `${StringUtils.pad(date.getDate())} ${this.monthNames[date.getMonth()].substr(0, 3)} ${date.getFullYear()}`;
         const displayTime = `${date.getHours()}:${date.getMinutes()}`;
-        return `${displayDate} ${displayTime}`;
+        return shouldIncludeTime ? `${displayDate} ${displayTime}` : displayDate;
     }
 }

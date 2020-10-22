@@ -27,6 +27,8 @@ export class TaskManagerService {
     /**
     * Fetch all tasks. 
     * `tasks$` will be updated with the results.
+    * 
+    * @returns Observable of the response object
     */
     public fetchAll() {
         return this.httpClient.get<TaskListResponse>(`${this.API_URL}/list`, {
@@ -53,6 +55,43 @@ export class TaskManagerService {
             },
         }));
     }
+
+    /**
+     * Update existing task with provided values
+     * @param task 
+     * 
+     * @returns Observable of the response object
+     */
+    public updateTask(task: TaskItem) {
+        let requestBody = new FormData();
+        requestBody.set('message', task.message);
+        requestBody.set('priority', task.priority?.toString() || '');
+        requestBody.set('due_date', DateUtils.toRequestFormat(task.due_date) || '');
+        requestBody.set('assigned_to', task.assigned_to?.toString() || '');
+        requestBody.set('taskid', task.id);
+
+        return this.httpClient.post<GenericResponse>(`${this.API_URL}/update`, requestBody, {
+            headers: {
+                AuthToken: this.API_KEY,
+            }
+        }).pipe(tap({
+            next: response => {
+                if (response.status === 'success') {
+                    const taskList = [...this.tasks$.getValue()];
+                    const updateIndex = taskList.findIndex(x => x.id === task.id);
+                    if (updateIndex >= 0) {
+                        taskList[updateIndex] = task;
+                    }
+                    this.tasks$.next(taskList);
+                    console.log('Task update successful');
+                } else {
+                    console.error('Task update failed', response.error || 'Unknown error');
+                }
+            }, error: error => {
+                console.error('Updating task failed', error);
+            }
+        }));
+    }
     
     /**
     * Delete a task
@@ -60,7 +99,7 @@ export class TaskManagerService {
     * 
     * @retuns Observable result of the delete operation
     */
-    public deleteTask(taskId: string): Observable<GenericResponse> {
+    public deleteTask(taskId: string) {
         let requestBody = new FormData();
         requestBody.set('taskid', taskId);
         return this.httpClient.post<GenericResponse>(`${this.API_URL}/delete`, requestBody, {

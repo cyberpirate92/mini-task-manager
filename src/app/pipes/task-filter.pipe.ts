@@ -16,7 +16,7 @@ export class TaskFilterPipe {
      * 
      * @returns all strings in object joined as a single string
      */
-    public combineStrings(obj: object): string {
+    private combineStrings(obj: object): string {
         if (!obj || typeof obj !== 'object') {
             return '';
         }

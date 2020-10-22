@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TaskBoard } from './models';
+import { TaskBoard, TaskDropEvent } from './models';
 import { User } from './models/user';
 import { TaskManagerService } from './services/task-manager.service';
 import { UsersService } from './services/users.service';
@@ -12,7 +12,6 @@ import { UsersService } from './services/users.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-    
     public users: User[];
     public searchTerm: string;
     public isLoading: boolean;
@@ -70,6 +69,20 @@ export class AppComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    public handleDrop(event: TaskDropEvent) {
+        if (event.task.priority !== event.board.priority) {
+            console.log('Now this is interesting');
+            event.task.priority = event.board.priority;
+            this.taskService.updateTask(event.task).subscribe({
+                next: response => {
+                    console.log(response);
+                }
+            });
+        } else {
+            console.log('Dropped on the same board, how boring!');
+        }
     }
     
     public ngOnDestroy(): void {

@@ -22,7 +22,7 @@ export class UsersService {
     * Fetch all users. 
     * `users$` will be updated with the fetched list.
     * 
-    * @returns observable with same fetched list
+    * @returns observable of the response object
     */
     public fetchAll() {
         return this.httpClient.get<UserResponse>(`${this.API_URL}/listusers`, {
@@ -42,5 +42,13 @@ export class UsersService {
                 console.error('Error fetching user list', error);
             }
         }));
+    }
+
+    /**
+     * Fetch user by User ID from cache
+     * @param id User ID
+     */
+    public getUserById(id: number): User {
+        return id ? this.users$.getValue().find(x => x.id == id.toString()) : null;
     }
 }

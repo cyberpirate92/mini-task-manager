@@ -2,19 +2,19 @@
     <div class="col-12">
         <div class="card task-board mb-4">
             <div class="card-header">
-                <span class="board-title h5 text-muted">
+                <span class="badge badge-dark monospaced-font" *ngIf="filteredTasks.length>0">
+                    {{ filteredTasks.length | pad }}
+                </span>
+                <span class="board-title h5">
                     {{ boardConfig?.title }} 
-                    <span class="badge badge-pill badge-secondary" *ngIf="boardConfig?.items?.length>0">
-                        {{ boardConfig.items.length }}
-                    </span>
                 </span> 
-                <div class="float-right action action-danger">
+                <div class="float-right action">
                     <i class="fa fa-plus" (click)="newTask()"></i>
                 </div>
             </div>
-            <div class="card-body">
-                <ng-container *ngFor="let taskItem of boardConfig.items | taskFilter:filterTerm">
-                    <app-task-item [taskItem]="taskItem"></app-task-item>
+            <div class="card-body" (dragover)="$event.preventDefault()" (drop)="onDropped($event)">
+                <ng-container *ngFor="let task of filteredTasks">
+                    <app-task-item [taskItem]="task"></app-task-item>
                 </ng-container>
             </div>
         </div>

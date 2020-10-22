@@ -5,13 +5,14 @@
     overflow-y: scroll;
     overflow-x: auto;
 }
-.action {
-    .action-danger:hover {
-        color: red;
+.card-header {
+    .badge {
+        font-size: inherit;
     }
 }
-.card-header {
-    font-weight: 1rem;
+.card-body {
+    padding-top:0.5rem;
+    background-image: url("/assets/bg-texture.png");
 }
 .task-board {
     box-shadow: 0 0 10px 0 #333;

@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 body, html {
     height: 100vh;
-    font-size: 0.9rem;
+    font-size: 13px;
 }
 body {
     font-family: 'Mulish', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -9,5 +9,19 @@ body {
 }
 .action {
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.25rem !important;
+    color: #6c757d !important;
+    transition: color .25s ease-out !important;
+}
+.action:hover {
+    color: #111 !important;
+}
+.monospaced-font {
+    font-family: 'Courier New', Courier, monospace;
+}
+.text-semi-muted {
+    color: rgb(81, 56, 94) !important;
+}
+.font-weight-semi-bold {
+    font-weight: 600;
 }

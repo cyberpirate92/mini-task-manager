@@ -8,6 +8,7 @@ import { TaskItemComponent } from './task-item/task-item.component';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 import { FormsModule } from '@angular/forms';
 import { TaskFilterPipe } from './pipes/task-filter.pipe';
+import { PadPipe } from './pipes/pad.pipe';
 
 @NgModule({
     declarations: [
@@ -16,13 +17,14 @@ import { TaskFilterPipe } from './pipes/task-filter.pipe';
         TaskItemComponent,
         DateFormatPipe,
         TaskFilterPipe,
+        PadPipe,
     ],
     imports: [
         BrowserModule,
         HttpClientModule,
         FormsModule,
     ],
-    providers: [],
+    providers: [TaskFilterPipe],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
