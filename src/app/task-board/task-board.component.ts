@@ -9,6 +9,11 @@ import { TaskBoard, TaskItem } from '../models';
 export class TaskBoardComponent {
     
     @Input() boardConfig: TaskBoard;
+    @Input() filterTerm: string;
     
     constructor() { }
+
+    public newTask(): void {
+        // TODO: Implementation
+    }
 }

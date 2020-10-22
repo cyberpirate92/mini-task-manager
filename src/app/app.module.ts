@@ -7,6 +7,7 @@ import { TaskBoardComponent } from './task-board/task-board.component';
 import { TaskItemComponent } from './task-item/task-item.component';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 import { FormsModule } from '@angular/forms';
+import { TaskFilterPipe } from './pipes/task-filter.pipe';
 
 @NgModule({
     declarations: [
@@ -14,6 +15,7 @@ import { FormsModule } from '@angular/forms';
         TaskBoardComponent,
         TaskItemComponent,
         DateFormatPipe,
+        TaskFilterPipe,
     ],
     imports: [
         BrowserModule,

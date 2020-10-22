@@ -3,16 +3,17 @@
 }
 .title {
     font-weight: bold;
-    background-color: rgba(220, 220, 220);
     text-align: center;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: rgba(225, 225, 225, 0.75);
 }
 .board-outline {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    // box-shadow: 0 0 5px 0px #000;
-    border-radius: 10px;
-    border: 2px solid black;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
     height: 100%;
+    overflow-y: scroll;
+    overflow-x: auto;
+    border-left: 1px solid #222;
+    // box-shadow: 0 0 5px 0px #000;
+    // border: 2px solid black;
 }

@@ -1,13 +1,15 @@
 <div class="row board-outline">
     <div class="col-12">
         <div class="row">
-            <div class="col-12 title">
-                {{ boardConfig?.title }} <span class="badge badge-secondary" *ngIf="boardConfig?.items?.length>0">{{ boardConfig.items.length }}</span>
+            <div class="col-12 title text-left">
+                <span>{{ boardConfig?.title | uppercase }}</span> 
+                <span class="ml-2 badge badge-pill badge-secondary" *ngIf="boardConfig?.items?.length>0">{{ boardConfig.items.length }}</span>
+                <div class="float-right"><i class="fa fa-plus" (click)="newTask()"></i></div>
             </div>
         </div>
         <div class="row">
             <div class="col-12 content">
-                <ng-container *ngFor="let taskItem of boardConfig.items">
+                <ng-container *ngFor="let taskItem of boardConfig.items | taskFilter:filterTerm">
                     <app-task-item [taskItem]="taskItem"></app-task-item>
                 </ng-container>
             </div>

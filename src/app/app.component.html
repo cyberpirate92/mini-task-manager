@@ -4,7 +4,7 @@
             <input type="text" spellcheck="false" autocomplete="false" [(ngModel)]="searchTerm" placeholder="Enter term to search" class="form-control"/>
         </div>
         <ng-container *ngFor="let board of boards">
-            <app-task-board class="col-4" [boardConfig]="board"></app-task-board>
+            <app-task-board class="col-4" [boardConfig]="board" [filterTerm]="searchTerm"></app-task-board>
         </ng-container>
     </div>
 </div>
