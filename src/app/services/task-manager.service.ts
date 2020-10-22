@@ -20,47 +20,50 @@ export class TaskManagerService {
     constructor(private httpClient: HttpClient) { 
         this.API_URL = environment.apiUrl;
         this.API_KEY = environment.apiKey;
-
+        
         this.tasks$ = new BehaviorSubject([]);
         this.error$ = new BehaviorSubject("");
         this.isLoading$ = new BehaviorSubject(false);
-
-        this.fetchTasks();
     }
-
+    
     /**
-     * Fetch all tasks. `tasks$` will be updated with the results.
-     */
-    public fetchTasks(): void {
+    * Fetch all tasks. 
+    * `tasks$` will be updated with the results.
+    */
+    public fetchAll() {
         this.isLoading$.next(true);
-        this.httpClient.get<TaskListResponse>(`${this.API_URL}/list`, {
+        return this.httpClient.get<TaskListResponse>(`${this.API_URL}/list`, {
             headers: {
                 AuthToken: this.API_KEY,
             }
-        }).pipe(finalize(() => this.isLoading$.next(false))).subscribe(response => {
-            if (response.status === 'success') {
-                this.tasks$.next(response.tasks.map(t => {
-                    t.created_on = t.created_on && DateUtils.fromResponseFormat(t.created_on as any);
-                    t.due_date = t.due_date && DateUtils.fromResponseFormat(t.due_date as any);
-                    t.priority = t.priority && parseInt(t.priority as any);
-                    t.assigned_to = t.assigned_to && parseInt(t.assigned_to as any);
-                    return t;
-                }));
-            } else {
-                this.error$.next(response.error || 'Unknown error, please try reloading the page');
-            }
-        }, (error: HttpErrorResponse) => {
-            console.error(error);
-            this.error$.next(error.message);
-        });
+        }).pipe(tap({
+            next: response => {
+                if (response.status === 'success') {
+                    this.tasks$.next(response.tasks.map(t => {
+                        t.created_on = t.created_on && DateUtils.fromResponseFormat(t.created_on as any);
+                        t.due_date = t.due_date && DateUtils.fromResponseFormat(t.due_date as any);
+                        t.priority = t.priority && parseInt(t.priority as any);
+                        t.assigned_to = t.assigned_to && parseInt(t.assigned_to as any);
+                        return t;
+                    }));
+                } else {
+                    this.error$.next(response.error || 'Unknown error, please try reloading the page');
+                }
+            },
+            error: (error: HttpErrorResponse) => {
+                console.error(error);
+                this.error$.next(error.message);
+            },
+            complete: () => this.isLoading$.next(false),
+        }));
     }
-
+    
     /**
-     * Delete a task
-     * @param taskId ID of the task to be deleted 
-     * 
-     * @retuns Observable result of the delete operation
-     */
+    * Delete a task
+    * @param taskId ID of the task to be deleted 
+    * 
+    * @retuns Observable result of the delete operation
+    */
     public deleteTask(taskId: string): Observable<GenericResponse> {
         let requestBody = new FormData();
         requestBody.set('taskid', taskId);
@@ -68,9 +71,11 @@ export class TaskManagerService {
             headers: {
                 AuthToken: this.API_KEY,
             }
-        }).pipe(tap(response => {
-            if (response.status === 'success') {
-                this.tasks$.next(this.tasks$.getValue().filter(task => task.id !== taskId));
+        }).pipe(tap({
+            next: response => {
+                if (response.status === 'success') {
+                    this.tasks$.next(this.tasks$.getValue().filter(task => task.id !== taskId));
+                }
             }
         }));
     }

@@ -21,8 +21,10 @@ export class TaskItemComponent {
     
     public deleteSelf() {
         this.isLoading = true;
-        this.taskManager.deleteTask(this.taskItem.id).subscribe(response => {
-            console.log(response);
+        this.taskManager.deleteTask(this.taskItem.id).subscribe({
+            next: response => {
+                console.log(response);
+            }
         });
     }
 }
