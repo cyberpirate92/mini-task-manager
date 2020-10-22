@@ -1,8 +1,8 @@
 <div class="container-fluid h-100">
     <ng-container *ngIf="!isLoading; else LoadingScreen">
         <div class="row mt-4">
-            <div class="offset-md-3"></div>      
-            <div class="col-sm-12 col-md-6">
+            <div class="offset-md-8"></div>      
+            <div class="col-sm-12 col-md-4">
                 <div class="form-group">
                     <input type="text" spellcheck="false" autocomplete="false" [(ngModel)]="searchTerm" placeholder="Type to search" class="form-control form-control-lg"/>
                 </div>
@@ -21,7 +21,7 @@
     </ng-container>
 </div>
 <ng-template #LoadingScreen>
-    <div class="col-12 text-center text-light mt-4">
+    <div class="col-12 text-center text-light my-auto mx-auto">
         <p class="mt-4"><i class="fa fa-spin fa-spinner fa-3x"></i></p>
         <p class="h3">Loading tasks, please wait</p>
     </div>

@@ -33,13 +33,17 @@ export class TaskItemComponent implements OnInit, OnChanges {
         this.refresh();
     }
 
-    public refresh() {
+    public refresh(): void {
         const now = new Date();
         this.isOverdue = this.taskItem.due_date < now;
         this.userDisplayPicture = this.userService.getUserById(this.taskItem?.assigned_to)?.picture;
     }
+
+    public editSelf(): void {
+        // TODO: Implementation
+    }
     
-    public deleteSelf() {
+    public deleteSelf(): void {
         this.isLoading = true;
         this.taskManager.deleteTask(this.taskItem.id).subscribe({
             next: response => {
@@ -48,12 +52,12 @@ export class TaskItemComponent implements OnInit, OnChanges {
         });
     }
 
-    public onDragStart(event: DragEvent) {
+    public onDragStart(event: DragEvent): void {
         event.dataTransfer.setData('task', JSON.stringify(this.taskItem));
         event.dataTransfer.dropEffect = 'move';
     }
 
-    public onDragComplete(event: DragEvent) {
+    public onDragComplete(event: DragEvent): void {
         console.log(event);
     }
 }

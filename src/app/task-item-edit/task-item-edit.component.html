@@ -30,21 +30,25 @@
                 </div> -->
                 <div class="col-6">
                     <div class="form-group text-left">
+                        <label>Assign To</label>
                         <select class="form-control" formControlName="assigned_to">
-                            <option [value]="'0'" selected>Assign To</option>
+                            <option value="" disabled selected>Select user</option>
                             <option [value]="user.id" *ngFor="let user of users">{{user.name}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-6 text-right">
-                    <div class="form-group">
+                <div class="col-6">
+                    <div class="form-group text-right">
+                        <label class="float-left">Due Date</label>
                         <input type="date" formControlName="due_date" class="form-control">
                     </div>
                 </div>
             </div>
-            <div class="row col-12">
-                <button class="btn btn-success btn-sm" type="submit">Save</button>
-                <button class="btn btn-secondary btn-sm float-right" type="button" (click)="onCancelled()">Cancel</button>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-secondary float-right" type="button" (click)="onCancelled()"><i class="fa fa-times"></i> Cancel</button>
+                    <button class="btn btn-success btn-success float-right mr-2" type="submit"><i class="fa fa-check"></i> Save</button>
+                </div>
             </div>
         </form>
     </div>

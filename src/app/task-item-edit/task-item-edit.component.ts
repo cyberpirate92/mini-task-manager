@@ -29,7 +29,7 @@ export class TaskItemEditComponent implements OnInit {
         this.users = [];
         this.editForm = new FormGroup({
             message: new FormControl('', [Validators.required]),
-            assigned_to: new FormControl(),
+            assigned_to: new FormControl(''),
             due_date: new FormControl()
         });
     }

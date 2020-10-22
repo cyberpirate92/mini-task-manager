@@ -5,7 +5,7 @@ body, html {
 }
 body {
     font-family: 'Mulish', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    background: linear-gradient(90deg, rgba(15,150,218,0.9037990196078431) 0%, rgba(0,20,255,0.7133228291316527) 100%);
+    background: linear-gradient(90deg, rgba(15,150,218,0.90) 0%, rgba(0,20,255,0.71) 100%);
 }
 .action {
     cursor: pointer;
@@ -37,6 +37,14 @@ body {
         width: 20px;
         height: 20px;
         border-radius: 50%;
+    }
+
+    textarea, input[type='text'], input[type='date'], select {
+        font-size: 1.2rem;
+    }
+
+    button {
+        font-size: 1.1rem;
     }
 }
 .task-card.overdue {
