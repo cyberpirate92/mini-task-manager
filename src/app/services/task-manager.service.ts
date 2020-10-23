@@ -48,10 +48,8 @@ export class TaskManagerService {
     public fetchAll(isAutoSync: boolean = false) {
         if (isAutoSync && this.pauseSync$.getValue()) {
             // If sync is paused, do nothing
-            console.log('Sync paused');
             return EMPTY;
         }
-        console.log('Syncing...');
         return this.httpClient.get<TaskListResponse>(`${this.API_URL}/list`).pipe(tap({
             next: response => {
                 if (response.status === 'success') {
