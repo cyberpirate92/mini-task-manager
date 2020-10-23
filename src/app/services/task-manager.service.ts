@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CreateTaskResponse, GenericResponse, TaskItem, TaskListResponse } from '../models';
@@ -11,28 +11,26 @@ import { DateUtils } from '../utils/date-utils';
 })
 export class TaskManagerService {    
     private API_URL: string;
-    private API_KEY: string;
     
     public tasks$: BehaviorSubject<TaskItem[]>;
     public error$: BehaviorSubject<string>;
     
     public readonly PRIORITIES = [{
         value: 1,
-        label: 'High Priority',
-        styleClass: 'priority-high',
+        label: 'Low Priority',
+        styleClass: 'priority-low',
     }, {
         value: 2,
         label: 'Medium Priority',
         styleClass: 'priority-medium',
     }, {
         value: 3,
-        label: 'Low Priority',
-        styleClass: 'priority-low',
+        label: 'High Priority',
+        styleClass: 'priority-high',
     }];
     
     constructor(private httpClient: HttpClient) { 
         this.API_URL = environment.apiUrl;
-        this.API_KEY = environment.apiKey;
         
         this.tasks$ = new BehaviorSubject([]);
         this.error$ = new BehaviorSubject("");
@@ -45,11 +43,7 @@ export class TaskManagerService {
     * @returns Observable of the response object
     */
     public fetchAll() {
-        return this.httpClient.get<TaskListResponse>(`${this.API_URL}/list`, {
-            headers: {
-                AuthToken: this.API_KEY,
-            }
-        }).pipe(tap({
+        return this.httpClient.get<TaskListResponse>(`${this.API_URL}/list`).pipe(tap({
             next: response => {
                 if (response.status === 'success') {
                     this.tasks$.next(response.tasks.map(t => {
@@ -83,11 +77,7 @@ export class TaskManagerService {
         requestBody.set('due_date', DateUtils.toRequestFormat(task.due_date) || '');
         requestBody.set('assigned_to', task.assigned_to?.toString() || '');
         
-        return this.httpClient.post<CreateTaskResponse>(`${this.API_URL}/create`, requestBody, {
-            headers: {
-                AuthToken: this.API_KEY,
-            }
-        }).pipe(tap({
+        return this.httpClient.post<CreateTaskResponse>(`${this.API_URL}/create`, requestBody).pipe(tap({
             next: response => {
                 if (response.status === 'success') {
                     task.id = response.taskid;
@@ -113,11 +103,7 @@ export class TaskManagerService {
         requestBody.set('assigned_to', task.assigned_to?.toString() || '');
         requestBody.set('taskid', task.id);
         
-        return this.httpClient.post<GenericResponse>(`${this.API_URL}/update`, requestBody, {
-            headers: {
-                AuthToken: this.API_KEY,
-            }
-        }).pipe(tap({
+        return this.httpClient.post<GenericResponse>(`${this.API_URL}/update`, requestBody).pipe(tap({
             next: response => {
                 if (response.status === 'success') {
                     const taskList = [...this.tasks$.getValue()];
@@ -145,11 +131,7 @@ export class TaskManagerService {
     public deleteTask(taskId: string) {
         let requestBody = new FormData();
         requestBody.set('taskid', taskId);
-        return this.httpClient.post<GenericResponse>(`${this.API_URL}/delete`, requestBody, {
-            headers: {
-                AuthToken: this.API_KEY,
-            }
-        }).pipe(tap({
+        return this.httpClient.post<GenericResponse>(`${this.API_URL}/delete`, requestBody).pipe(tap({
             next: response => {
                 if (response.status === 'success') {
                     this.tasks$.next(this.tasks$.getValue().filter(task => task.id !== taskId));

@@ -11,7 +11,7 @@ export class DateUtils {
      * Check if value is a date object
      */
     public static isDate(value: any): boolean {
-        return value && typeof value === 'object' && value instanceof Date;
+        return !!(value && typeof value === 'object' && value instanceof Date);
     }
 
     /**
@@ -48,7 +48,7 @@ export class DateUtils {
      * @param date The date object to convert
      * @param shouldIncludeTime Should the formatted string contain time?
      * 
-     * @returns Date in Display format
+     * @returns formatted date string
      */
     public static toDisplayFormat(date: Date, shouldIncludeTime = true): string {
         if (!this.isDate(date)) {
@@ -57,5 +57,26 @@ export class DateUtils {
         const displayDate = `${StringUtils.pad(date.getDate())} ${this.monthNames[date.getMonth()].substr(0, 3)} ${date.getFullYear()}`;
         const displayTime = `${date.getHours()}:${date.getMinutes()}`;
         return shouldIncludeTime ? `${displayDate} ${displayTime}` : displayDate;
+    }
+
+    /**
+     * Convert date object to standard input[type='date'] format yyyy-mm-dd
+     * @param date The date object to transform
+     * 
+     * @returns formatted date string
+     */
+    public static toDateInputFormat(date: Date): string {
+        if (!this.isDate(date)) {
+            return '';
+        }
+        return `${date.getFullYear()}-${StringUtils.pad(date.getMonth()+1)}-${StringUtils.pad(date.getDate())}`;
+    }
+
+    /**
+     * Convert date string from 
+     * @param dateString 
+     */
+    public static fromDateInputFormat(dateString: string): Date {
+        return new Date();
     }
 }

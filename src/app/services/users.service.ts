@@ -25,11 +25,7 @@ export class UsersService {
     * @returns observable of the response object
     */
     public fetchAll() {
-        return this.httpClient.get<UserResponse>(`${this.API_URL}/listusers`, {
-            headers: {
-                AuthToken: environment.apiKey,
-            }
-        }).pipe(tap({
+        return this.httpClient.get<UserResponse>(`${this.API_URL}/listusers`).pipe(tap({
             next: response => {
                 if (response.status !== 'success') {
                     console.error(response.error || 'Fetching user list failed: Unknown error');
@@ -43,11 +39,11 @@ export class UsersService {
             }
         }));
     }
-
+    
     /**
-     * Fetch user by User ID from cache
-     * @param id User ID
-     */
+    * Fetch user by User ID from cache
+    * @param id User ID
+    */
     public getUserById(id: number): User {
         return id ? this.users$.getValue().find(x => x.id == id.toString()) : null;
     }

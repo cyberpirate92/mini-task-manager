@@ -1,4 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+$breakpoints: (
+xs: 576px,
+sm: 768px,
+md: 992px,
+lg: 1200px
+);
+
+@mixin respond-above($breakpoint) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        $breakpoint-value: map-get($breakpoints, $breakpoint);
+        @media (min-width: $breakpoint-value) {
+            @content;
+        }
+    } @else {
+        @warn 'Invalid breakpoint: #{$breakpoint}.';
+    }
+}
+
 body, html {
     height: 100vh;
     font-size: 13px;
@@ -25,6 +43,20 @@ body {
 .font-weight-semi-bold {
     font-weight: 600;
 }
+.empty-state {
+    
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    
+    .message.message-primary {
+        margin-top: 0.5rem;
+        font-size: 1.2rem;
+    }
+    .message.message-secondary {
+        font-size: 1.1rem;
+        margin-top: 0.25rem;
+    }
+}
 .task-card {
     box-shadow: 0 0 2px 0 #444;
     transition: all .2s ease-in-out;
@@ -38,11 +70,11 @@ body {
         height: 20px;
         border-radius: 50%;
     }
-
+    
     textarea, input[type='text'], input[type='date'], select {
         font-size: 1.2rem;
     }
-
+    
     button {
         font-size: 1.1rem;
     }
@@ -67,3 +99,16 @@ body {
 .priority-low {
     color: cornflowerblue;
 }
+.clickable {
+    cursor: pointer;
+}
+@include respond-above(sm) {
+    .restrict-width-md {
+        max-width: 25%;
+    }
+}
+// .board-container {
+    //     display: flex;
+    //     overflow-x: auto;
+    //     flex-wrap: nowrap;
+    // }

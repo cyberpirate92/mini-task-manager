@@ -1,19 +1,22 @@
 <div class="row board-outline">
     <div class="col-12">
-        <div class="card task-board mb-4">
+        <div class="card task-board mb-4" 
+        (dragover)="onDragOver($event)" 
+        (dragleave)="onDragLeave($event)" 
+        (drop)="onDropped($event)">
             <div class="card-header">
                 <img [src]="displayPicture" class="display-picture" *ngIf="displayPicture">
                 <span class="board-title h5">
                     {{ title }}
                 </span> 
-                <span class="badge badge-dark monospaced-font" *ngIf="filteredTasks.length>0">
+                <span class="badge badge-dark monospaced-font item-count" *ngIf="filteredTasks.length>0">
                     {{ filteredTasks.length | pad }}
                 </span>
                 <div class="float-right action">
                     <i class="fa fa-plus" (click)="newTask()"></i>
                 </div>
             </div>
-            <div class="card-body" (dragover)="$event.preventDefault()" (drop)="onDropped($event)">
+            <div class="card-body" *ngIf="showCreateTaskCard || filteredTasks.length > 0; else NoTasks">
                 <app-task-item-edit *ngIf="showCreateTaskCard" 
                     (onSave)="createTask($event)" 
                     (onCancel)="showCreateTaskCard = false" 
@@ -27,3 +30,16 @@
         </div>
     </div>
 </div>
+<ng-template #NoTasks>
+    <div class="col-12 text-center mt-3 text-muted empty-state">
+        <p class="icon">
+            <i class="fa fa-folder-open-o fa-3x"></i>
+        </p>
+        <div class="message message-primary">
+            No tasks here
+        </div>
+        <div class="message message-secondary">
+            Click on the <i class="fa fa-plus"></i> icon to add tasks or drag one from another board
+        </div>
+    </div>
+</ng-template>

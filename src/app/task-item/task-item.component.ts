@@ -14,6 +14,7 @@ export class TaskItemComponent implements OnInit, OnChanges {
     @Input() taskItem: TaskItem;
     @Output() onDelete: EventEmitter<TaskItem>;
 
+    public inEditMode: boolean;
     public isLoading: boolean;
     public isOverdue: boolean;
     public userDisplayPicture: string;
@@ -23,6 +24,7 @@ export class TaskItemComponent implements OnInit, OnChanges {
         this.onDelete = new EventEmitter();
         this.isLoading = false;
         this.isOverdue = false;
+        this.inEditMode = false;
         this.userDisplayPicture = environment.defaultDisplayPicture;
     }
 
@@ -36,12 +38,12 @@ export class TaskItemComponent implements OnInit, OnChanges {
 
     public refresh(): void {
         const now = new Date();
-        this.isOverdue = this.taskItem.due_date < now;
+        this.isOverdue = this.taskItem.due_date && this.taskItem.due_date < now;
         this.userDisplayPicture = this.userService.getUserById(this.taskItem?.assigned_to)?.picture;
     }
 
-    public editSelf(): void {
-        // TODO: Implementation
+    public updateSelf(updatedTaskItem: TaskItem): void {
+        this.taskManager.updateTask(updatedTaskItem).subscribe();
     }
     
     public deleteSelf(): void {

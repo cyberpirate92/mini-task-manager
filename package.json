@@ -1,6 +1,9 @@
 {
   "name": "mini-task-manager",
   "version": "0.0.0",
+  "repository": {
+    "url": "https://github.com/cyberpirate92/mini-task-manager"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

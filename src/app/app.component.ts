@@ -12,22 +12,23 @@ import { UsersService } from './services/users.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-
+    
     private _users: User[];
-
+    
     public searchTerm: string;
     public isLoading: boolean;
     public destroy$: Subject<any>;
     public selectedTaskGroup: TaskGroup;
-
+    public filterDateRange: Date[];
+    
     /** 
-     * Predefined task grouping configurations 
-     */
+    * Predefined task grouping configurations 
+    */
     public readonly taskGroups: TaskGroup[] = [{
         displayName: 'Priority',
         propertyName: 'priority',
-        values: [...this.taskService.PRIORITIES.map(x => x.value), false],
-        displayLabels: [...this.taskService.PRIORITIES.map(x => x.label), 'No Priority'],
+        values: this.taskService.PRIORITIES.map(x => x.value),
+        displayLabels: this.taskService.PRIORITIES.map(x => x.label),
     },{
         displayName: 'Assigned To',
         propertyName: 'assigned_to',
@@ -35,11 +36,11 @@ export class AppComponent implements OnInit, OnDestroy {
         displayLabels: [],
         displayPictures: [],
     }];
-
+    
     public get users(): User[] {
         return this._users;
     }
-
+    
     public set users(list: User[]) {
         this._users = list;
         const taskGroup = this.taskGroups.find(g => g.propertyName === 'assigned_to');
@@ -56,6 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this._users = [];
         this.isLoading = true;
         this.selectedTaskGroup = this.taskGroups[0];
+        this.filterDateRange = [];
     }
     
     public ngOnInit(): void {
@@ -72,6 +74,15 @@ export class AppComponent implements OnInit, OnDestroy {
         });
     }
 
+    public onDateRangeChange(change: Date[]) {
+        if (change && typeof change === 'object' && change instanceof Array) {
+            this.filterDateRange = [...change];
+            console.log(this.filterDateRange);
+        } else {
+            this.filterDateRange = [];
+        }
+    }
+    
     public updateGrouping(taskGroup: TaskGroup) {
         this.selectedTaskGroup = taskGroup;
     }

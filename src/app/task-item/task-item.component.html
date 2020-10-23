@@ -1,4 +1,6 @@
-<div class="card task-card mt-3" [ngClass]="{ 'overdue' : isOverdue }" draggable="true" (dragstart)="onDragStart($event)" (dragend)="onDragComplete($event)" [attr.data-taskid]="taskItem.id">
+<app-task-item-edit *ngIf="inEditMode" [taskItem]="taskItem" (onCancel)="inEditMode=false" (onSave)="updateSelf($event)">
+</app-task-item-edit>
+<div *ngIf="!inEditMode" class="card task-card mt-3" [ngClass]="{ 'overdue' : isOverdue }" [draggable]="!isLoading" (dragstart)="onDragStart($event)" (dragend)="onDragComplete($event)" [attr.data-taskid]="taskItem.id">
     <div class="card-body" *ngIf="!isLoading; else Loader">
         <div class="card-title">
             <div class="row">
@@ -13,6 +15,13 @@
         <div class="col-12 px-0">
             <span class="h5">{{ taskItem.message }}</span>
         </div>
+        <div class="col-12 px-0">
+            <details>
+                <summary>Debug</summary>
+                <pre><code>{{ taskItem | json }}</code></pre>
+            </details>
+        </div>
+        <hr>
         <div class="col-12 px-0 mt-2">
             <div class="row">
                 <div class="col text-left">
@@ -32,14 +41,8 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="col-12">
-            <details>
-                <summary>Debug</summary>
-                <pre><code>{{ taskItem | json }}</code></pre>
-            </details>
-        </div> -->
         <div class="action-pane">
-            <i class="fa fa-pencil action mr-3" title="Edit this task" (click)="editSelf()"></i>
+            <i class="fa fa-pencil action mr-3" title="Edit this task" (click)="inEditMode=true"></i>
             <i class="fa fa-trash action" title="Delete this task" (click)="deleteSelf()"></i>
         </div>
     </div>
@@ -51,7 +54,7 @@
     <span class="text-muted">Unassigned</span>
 </ng-template>
 <ng-template #NoDueDate>
-    <small class="text-muted">No Due Date</small>
+    <span class="text-muted">No Due Date</span>
 </ng-template>
 <ng-template #Loader>
     <div class="card-body text-center">

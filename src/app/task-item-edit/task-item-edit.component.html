@@ -26,7 +26,6 @@
                     <div class="form-group">
                         <label>Priority</label>
                         <select class="form-control" formControlName="priority">
-                            <option value="" disabled selected>Choose Priority</option>
                             <option *ngFor="let p of priorities" [value]="p.value">
                                 {{p.label}}
                             </option>
@@ -36,7 +35,14 @@
                 <div class="col-6">
                     <div class="form-group text-right">
                         <label class="float-left">Due Date</label>
-                        <input type="date" formControlName="due_date" class="form-control">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                            </div>
+                            <input type="text" formControlName="due_date" class="form-control" placeholder="Set due date" bsDatepicker>
+                        </div>
                     </div>
                 </div>
             </div>
