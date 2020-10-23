@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, EMPTY } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CreateTaskResponse, GenericResponse, TaskItem, TaskListResponse } from '../models';
@@ -14,6 +14,7 @@ export class TaskManagerService {
     
     public tasks$: BehaviorSubject<TaskItem[]>;
     public error$: BehaviorSubject<string>;
+    public pauseSync$: BehaviorSubject<boolean>;
     
     public readonly PRIORITIES = [{
         value: 1,
@@ -34,15 +35,23 @@ export class TaskManagerService {
         
         this.tasks$ = new BehaviorSubject([]);
         this.error$ = new BehaviorSubject("");
+        this.pauseSync$ = new BehaviorSubject(false);
     }
     
     /**
     * Fetch all tasks. 
     * `tasks$` will be updated with the results.
+    * @param isAutoSync Set this to `true` when calling this method as part of auto sync
     * 
     * @returns Observable of the response object
     */
-    public fetchAll() {
+    public fetchAll(isAutoSync: boolean = false) {
+        if (isAutoSync && this.pauseSync$.getValue()) {
+            // If sync is paused, do nothing
+            console.log('Sync paused');
+            return EMPTY;
+        }
+        console.log('Syncing...');
         return this.httpClient.get<TaskListResponse>(`${this.API_URL}/list`).pipe(tap({
             next: response => {
                 if (response.status === 'success') {
@@ -112,7 +121,6 @@ export class TaskManagerService {
                         taskList[updateIndex] = task;
                     }
                     this.tasks$.next(taskList);
-                    console.log('Task update successful');
                 } else {
                     console.error('Task update failed', response.error || 'Unknown error');
                 }

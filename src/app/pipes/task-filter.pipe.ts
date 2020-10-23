@@ -8,7 +8,6 @@ import { DateUtils } from '../utils/date-utils';
 export class TaskFilterPipe {
     public transform(tasks: TaskItem[], filterString: string, dateRange: Date[] = []): TaskItem[] {
         const isValidDateRange =  dateRange && dateRange.length >= 2 && DateUtils.isDate(dateRange[0]) && DateUtils.isDate(dateRange[1]);
-        console.log('is-valid-daterange', dateRange, isValidDateRange);
         if (isValidDateRange) {
             tasks = tasks.filter(x => x.due_date >= dateRange[0] && x.due_date <= dateRange[1]);
         }

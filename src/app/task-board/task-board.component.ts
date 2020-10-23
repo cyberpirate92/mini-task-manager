@@ -18,12 +18,22 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     @Input() value: string | number;
     @Input() displayPicture: string;
     @Input() filterTerm: string;
-    @Input() filterDateRange: Date[];
+    @Input() filterDateRange: Date[]
+    
+    private _showCreateTaskCard: boolean;
+
+    public get showCreateTaskCard(): boolean {
+        return this._showCreateTaskCard;
+    }
+
+    public set showCreateTaskCard(value: boolean) {
+        this._showCreateTaskCard = value;
+        this.taskManager.pauseSync$.next(value);
+    }
     
     public destroy$: Subject<any>;
     public tasks: TaskItem[];
     public filteredTasks: TaskItem[];
-    public showCreateTaskCard: boolean;
     public hasDragOver: boolean;
     
     constructor(private taskFilterPipe: TaskFilterPipe, private taskManager: TaskManagerService, private userService: UsersService) { 
@@ -40,7 +50,6 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
                 this.tasks = !!this.value 
                     ? [...tasks.filter(task => task[this.property]==this.value)] 
                     : [...tasks.filter(task => !task[this.property])];
-                console.log('NgOnInit called', this.property, this.value, this.tasks);
                 this.applyFilter();
             }
         });
@@ -48,7 +57,6 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.filterTerm || changes.filterDateRange) {
-            console.log(changes);
             this.applyFilter();
         }
     }
@@ -58,7 +66,6 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     }
     
     public onDropped(event: DragEvent) {
-        console.log(event);
         if (this.hasDragOver) {
             this.hasDragOver = false;
         }
@@ -66,7 +73,6 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
             let task = JSON.parse(event.dataTransfer.getData('task')) as TaskItem;
             task.due_date = new Date(task.due_date);
             task.created_on = new Date(task.created_on);
-            console.log(task);
             if (task[this.property] !== this.value) {
                 task[this.property] = this.value;
                 if (task.assigned_to) {

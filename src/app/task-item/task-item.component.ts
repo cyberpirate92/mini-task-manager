@@ -14,7 +14,17 @@ export class TaskItemComponent implements OnInit, OnChanges {
     @Input() taskItem: TaskItem;
     @Output() onDelete: EventEmitter<TaskItem>;
 
-    public inEditMode: boolean;
+    private _inEditMode: boolean;
+
+    public get inEditMode(): boolean {
+        return this._inEditMode;
+    }
+
+    public set inEditMode(value: boolean) {
+        this._inEditMode = value;
+        this.taskManager.pauseSync$.next(value); /* Don't sync when editing something */
+    }
+
     public isLoading: boolean;
     public isOverdue: boolean;
     public userDisplayPicture: string;
@@ -48,11 +58,7 @@ export class TaskItemComponent implements OnInit, OnChanges {
     
     public deleteSelf(): void {
         this.isLoading = true;
-        this.taskManager.deleteTask(this.taskItem.id).subscribe({
-            next: response => {
-                console.log(response);
-            }
-        });
+        this.taskManager.deleteTask(this.taskItem.id).subscribe();
     }
 
     public onDragStart(event: DragEvent): void {
@@ -61,6 +67,10 @@ export class TaskItemComponent implements OnInit, OnChanges {
     }
 
     public onDragComplete(event: DragEvent): void {
-        console.log(event);
+        console.info(event);
+    }
+
+    public setEditMode(): void {
+        this.inEditMode = true;
     }
 }

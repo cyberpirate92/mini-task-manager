@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { TaskGroup } from './models';
 import { User } from './models/user';
 import { TaskManagerService } from './services/task-manager.service';
@@ -20,6 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public destroy$: Subject<any>;
     public selectedTaskGroup: TaskGroup;
     public filterDateRange: Date[];
+
+    private intervalId: number;
     
     /** 
     * Predefined task grouping configurations 
@@ -66,6 +69,10 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.userService.users$.pipe(takeUntil(this.destroy$)).subscribe({
                     next: users => this.users = users,
                 });
+                // Refresh task list every 90 seconds
+                this.intervalId = window.setInterval(() => {
+                    this.taskService.fetchAll(true).subscribe();
+                }, environment.syncInterval);
             }, error: error => {
                 console.error('Initializion failed', error);
             }, complete: () => {
@@ -77,7 +84,6 @@ export class AppComponent implements OnInit, OnDestroy {
     public onDateRangeChange(change: Date[]) {
         if (change && typeof change === 'object' && change instanceof Array) {
             this.filterDateRange = [...change];
-            console.log(this.filterDateRange);
         } else {
             this.filterDateRange = [];
         }
