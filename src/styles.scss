@@ -56,4 +56,14 @@ body {
 .task-card:hover {
     box-shadow: 0 0 4px 0 #000;
     background-color: #fff;
+    border-left-width: 10px;
+}
+.priority-high {
+    color: deeppink;
+}
+.priority-medium {
+    color: orange;
+}
+.priority-low {
+    color: cornflowerblue;
 }

@@ -3,37 +3,33 @@
         <form [formGroup]="editForm" (submit)="save()">
             <div class="row">
                 <div class="col-12">
+                    <div class="form-group text-left">
+                        <label>Assign Task To</label>
+                        <select class="form-control" formControlName="assigned_to">
+                            <option value="" disabled selected>Select user</option>
+                            <option [value]="user.id" *ngFor="let user of users">{{user.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
                     <div class="form-group">
-                        <textarea class="form-control" placeholder="Task Description" formControlName="message">
+                        <label>Task Description<sup class="text-danger font-weight-bold">*</sup></label>
+                        <textarea class="form-control" placeholder="Enter task description here" formControlName="message">
                         </textarea>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <!-- <div class="col-6">
-                    <div class="form-group">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="display-picture" [src]="selectedUser?.picture" *ngIf="selectedUser?.picture">
-                                <span>{{ selectedUser?.name || 'Assign To' }}</span>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <ng-container *ngFor="let user of users">
-                                    <div class="dropdown-item" (click)="selectedUser = user">
-                                        <img class="display-picture" [src]="user.picture">
-                                        <span class="d-inline-block">{{user.name}}</span>
-                                    </div>
-                                </ng-container>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="col-6">
-                    <div class="form-group text-left">
-                        <label>Assign To</label>
-                        <select class="form-control" formControlName="assigned_to">
-                            <option value="" disabled selected>Select user</option>
-                            <option [value]="user.id" *ngFor="let user of users">{{user.name}}</option>
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select class="form-control" formControlName="priority">
+                            <option value="" disabled selected>Choose Priority</option>
+                            <option *ngFor="let p of priorities" [value]="p.value">
+                                {{p.label}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -47,7 +43,7 @@
             <div class="row">
                 <div class="col-12">
                     <button class="btn btn-secondary float-right" type="button" (click)="onCancelled()"><i class="fa fa-times"></i> Cancel</button>
-                    <button class="btn btn-success btn-success float-right mr-2" type="submit"><i class="fa fa-check"></i> Save</button>
+                    <button class="btn btn-success btn-success float-right mr-2" type="submit" [disabled]="!editForm.valid"><i class="fa fa-check"></i> Save</button>
                 </div>
             </div>
         </form>

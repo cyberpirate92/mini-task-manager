@@ -2,12 +2,13 @@
     <div class="col-12">
         <div class="card task-board mb-4">
             <div class="card-header">
-                <span class="badge badge-dark monospaced-font" *ngIf="filteredTasks.length>0">
-                    {{ filteredTasks.length | pad }}
-                </span>
+                <img [src]="displayPicture" class="display-picture" *ngIf="displayPicture">
                 <span class="board-title h5">
                     {{ title }}
                 </span> 
+                <span class="badge badge-dark monospaced-font" *ngIf="filteredTasks.length>0">
+                    {{ filteredTasks.length | pad }}
+                </span>
                 <div class="float-right action">
                     <i class="fa fa-plus" (click)="newTask()"></i>
                 </div>
@@ -16,7 +17,8 @@
                 <app-task-item-edit *ngIf="showCreateTaskCard" 
                     (onSave)="createTask($event)" 
                     (onCancel)="showCreateTaskCard = false" 
-                    [priority]="priority">
+                    [property]="property"
+                    [value]="value">
                 </app-task-item-edit>
                 <ng-container *ngFor="let task of filteredTasks">
                     <app-task-item [taskItem]="task"></app-task-item>

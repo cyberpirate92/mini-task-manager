@@ -13,7 +13,9 @@ import { TaskManagerService } from '../services/task-manager.service';
 export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     
     @Input() title: string;
-    @Input() priority: number;
+    @Input() property: string;
+    @Input() value: string | number;
+    @Input() displayPicture: string;
     @Input() filterTerm: string;
     
     public destroy$: Subject<any>;
@@ -31,7 +33,10 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnInit(): void {
         this.taskManager.tasks$.pipe(takeUntil(this.destroy$)).subscribe({
             next: tasks => {
-                this.tasks = [...tasks.filter(task => task.priority === this.priority)];
+                this.tasks = !!this.value 
+                    ? [...tasks.filter(task => task[this.property]==this.value)] 
+                    : [...tasks.filter(task => !task[this.property])];
+                console.log('NgOnInit called', this.property, this.value, this.tasks);
                 this.applyFilter();
             }
         });
@@ -56,8 +61,8 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
             task.due_date = new Date(task.due_date);
             task.created_on = new Date(task.created_on);
             console.log(task);
-            if (task.priority !== this.priority) {
-                task.priority = this.priority;
+            if (task[this.property] !== this.value) {
+                task[this.property] = this.value;
                 this.taskManager.updateTask(task).subscribe();
             }
         } catch(error) {

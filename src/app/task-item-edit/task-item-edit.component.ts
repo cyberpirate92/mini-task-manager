@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TaskItem } from '../models';
 import { User } from '../models/user';
+import { TaskManagerService } from '../services/task-manager.service';
 import { UsersService } from '../services/users.service';
 
 @Component({
@@ -13,7 +14,9 @@ import { UsersService } from '../services/users.service';
 })
 export class TaskItemEditComponent implements OnInit {
 
-    @Input() priority: number;
+    @Input() property: string;
+    @Input() value: any;
+
     @Output() onCancel: EventEmitter<any>;
     @Output() onSave: EventEmitter<TaskItem>;
     
@@ -21,16 +24,18 @@ export class TaskItemEditComponent implements OnInit {
     public users: User[];
     public selectedUser: User;
     public editForm: FormGroup;
+    public readonly priorities = this.taskManager.PRIORITIES;
     
-    constructor(private userService: UsersService) { 
+    constructor(private userService: UsersService, private taskManager: TaskManagerService) { 
         this.onCancel = new EventEmitter();
         this.onSave = new EventEmitter();
         this.destroy$ = new Subject();
         this.users = [];
         this.editForm = new FormGroup({
             message: new FormControl('', [Validators.required]),
-            assigned_to: new FormControl(''),
-            due_date: new FormControl()
+            assigned_to: new FormControl('', [Validators.pattern(/^\d\d*$/)]),
+            due_date: new FormControl(),
+            priority: new FormControl(''),
         });
     }
     
@@ -38,13 +43,14 @@ export class TaskItemEditComponent implements OnInit {
         this.userService.users$.pipe(takeUntil(this.destroy$)).subscribe({
             next: userList => this.users = userList,
         });
+        this.editForm.get(this.property).setValue(this.value);
     }
 
     public save(): void {
         if (this.editForm.valid) {
             let user = this.users.find(u => u.id === this.editForm.get('assigned_to').value);
             this.onSave.emit({
-                priority: this.priority,
+                priority: parseInt(this.editForm.get('priority').value),
                 assigned_to: user && parseInt(user.id),
                 created_on: new Date(),
                 due_date: new Date(this.editForm.get('due_date').value),
@@ -54,10 +60,6 @@ export class TaskItemEditComponent implements OnInit {
             });
             this.editForm.reset();
         }
-    }
-
-    public edit(): void {
-
     }
 
     public onCancelled() {

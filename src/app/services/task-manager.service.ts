@@ -16,6 +16,20 @@ export class TaskManagerService {
     public tasks$: BehaviorSubject<TaskItem[]>;
     public error$: BehaviorSubject<string>;
     
+    public readonly PRIORITIES = [{
+        value: 1,
+        label: 'High Priority',
+        styleClass: 'priority-high',
+    }, {
+        value: 2,
+        label: 'Medium Priority',
+        styleClass: 'priority-medium',
+    }, {
+        value: 3,
+        label: 'Low Priority',
+        styleClass: 'priority-low',
+    }];
+    
     constructor(private httpClient: HttpClient) { 
         this.API_URL = environment.apiUrl;
         this.API_KEY = environment.apiKey;
@@ -55,20 +69,20 @@ export class TaskManagerService {
             },
         }));
     }
-
+    
     /**
-     * Create task with provided values
-     * @param task The task to be created
-     * 
-     * @returns Observable with the response object
-     */
+    * Create task with provided values
+    * @param task The task to be created
+    * 
+    * @returns Observable with the response object
+    */
     public createTask(task: TaskItem) {
         let requestBody = new FormData();
         requestBody.set('message', task.message);
         requestBody.set('priority', task.priority?.toString() || '');
         requestBody.set('due_date', DateUtils.toRequestFormat(task.due_date) || '');
         requestBody.set('assigned_to', task.assigned_to?.toString() || '');
-
+        
         return this.httpClient.post<CreateTaskResponse>(`${this.API_URL}/create`, requestBody, {
             headers: {
                 AuthToken: this.API_KEY,
@@ -84,13 +98,13 @@ export class TaskManagerService {
             }
         }));
     }
-
+    
     /**
-     * Update existing task with provided values
-     * @param task 
-     * 
-     * @returns Observable of the response object
-     */
+    * Update existing task with provided values
+    * @param task 
+    * 
+    * @returns Observable of the response object
+    */
     public updateTask(task: TaskItem) {
         let requestBody = new FormData();
         requestBody.set('message', task.message);
@@ -98,7 +112,7 @@ export class TaskManagerService {
         requestBody.set('due_date', DateUtils.toRequestFormat(task.due_date) || '');
         requestBody.set('assigned_to', task.assigned_to?.toString() || '');
         requestBody.set('taskid', task.id);
-
+        
         return this.httpClient.post<GenericResponse>(`${this.API_URL}/update`, requestBody, {
             headers: {
                 AuthToken: this.API_KEY,

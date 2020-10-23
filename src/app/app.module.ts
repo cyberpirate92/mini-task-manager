@@ -1,6 +1,9 @@
 import { HttpClientModule } from '@angular/common/http'
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { AppComponent } from './app.component';
 import { TaskBoardComponent } from './task-board/task-board.component';
@@ -23,9 +26,11 @@ import { TaskItemEditComponent } from './task-item-edit/task-item-edit.component
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         HttpClientModule,
         FormsModule,
         ReactiveFormsModule,
+        BsDropdownModule.forRoot(),
     ],
     providers: [TaskFilterPipe],
     bootstrap: [AppComponent]

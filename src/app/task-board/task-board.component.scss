@@ -16,4 +16,10 @@
 }
 .task-board {
     box-shadow: 0 0 10px 0 #333;
+
+    .display-picture {
+        width: 25px;
+        height: 25px;
+        border-radius: 25%;
+    }
 }

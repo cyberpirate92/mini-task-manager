@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TaskBoard, TaskDropEvent } from './models';
+import { TaskGroup } from './models';
 import { User } from './models/user';
 import { TaskManagerService } from './services/task-manager.service';
 import { UsersService } from './services/users.service';
@@ -13,33 +12,58 @@ import { UsersService } from './services/users.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-    public users: User[];
+
+    private _users: User[];
+
     public searchTerm: string;
     public isLoading: boolean;
     public destroy$: Subject<any>;
-    
-    public boards: TaskBoard[] = [{
-        title: 'High Priority',
-        priority: 1,
+    public selectedTaskGroup: TaskGroup;
+
+    /** 
+     * Predefined task grouping configurations 
+     */
+    public readonly taskGroups: TaskGroup[] = [{
+        displayName: 'Priority',
+        propertyName: 'priority',
+        values: [...this.taskService.PRIORITIES.map(x => x.value), false],
+        displayLabels: [...this.taskService.PRIORITIES.map(x => x.label), 'No Priority'],
     },{
-        title: 'Medium Priority',
-        priority: 2,
-    },{
-        title: 'Low Priority',
-        priority: 3,
+        displayName: 'Assigned To',
+        propertyName: 'assigned_to',
+        values: [],
+        displayLabels: [],
+        displayPictures: [],
     }];
+
+    public get users(): User[] {
+        return this._users;
+    }
+
+    public set users(list: User[]) {
+        this._users = list;
+        const taskGroup = this.taskGroups.find(g => g.propertyName === 'assigned_to');
+        if (taskGroup) {
+            taskGroup.values = [...list.map(x => x.id), false];
+            taskGroup.displayLabels = [...list.map(x => x.name), 'Up for Grabs'];
+            taskGroup.displayPictures = [...list.map(x => x.picture), '']
+        }
+    }
     
     constructor(private taskService: TaskManagerService, private userService: UsersService) {
         this.destroy$ = new Subject();
         this.searchTerm = '';
-        this.users = [];
+        this._users = [];
         this.isLoading = true;
+        this.selectedTaskGroup = this.taskGroups[0];
     }
     
     public ngOnInit(): void {
         forkJoin([this.userService.fetchAll(), this.taskService.fetchAll()]).subscribe({
             next: _ => {
-                // TODO: remove
+                this.userService.users$.pipe(takeUntil(this.destroy$)).subscribe({
+                    next: users => this.users = users,
+                });
             }, error: error => {
                 console.error('Initializion failed', error);
             }, complete: () => {
@@ -48,18 +72,8 @@ export class AppComponent implements OnInit, OnDestroy {
         });
     }
 
-    public handleDrop(event: TaskDropEvent) {
-        if (event.task.priority !== event.board.priority) {
-            console.log('Now this is interesting');
-            event.task.priority = event.board.priority;
-            this.taskService.updateTask(event.task).subscribe({
-                next: response => {
-                    console.log(response);
-                }
-            });
-        } else {
-            console.log('Dropped on the same board, how boring!');
-        }
+    public updateGrouping(taskGroup: TaskGroup) {
+        this.selectedTaskGroup = taskGroup;
     }
     
     public ngOnDestroy(): void {

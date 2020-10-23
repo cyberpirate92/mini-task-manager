@@ -1,7 +1,19 @@
 <div class="container-fluid h-100">
     <ng-container *ngIf="!isLoading; else LoadingScreen">
         <div class="row mt-4">
-            <div class="offset-md-8"></div>      
+            <div class="col-sm-12 col-md-4">
+                <div class="btn-group" dropdown>
+                    <button id="button-animated" dropdownToggle type="button" class="btn btn-light btn-lg dropdown-toggle" aria-controls="dropdown-animated">
+                        Group By: {{ selectedTaskGroup.displayName }} <span class="caret"></span>
+                    </button>
+                    <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-animated">
+                        <li role="menuitem" *ngFor="let taskGroup of taskGroups" (click)="updateGrouping(taskGroup)">
+                            <span class="dropdown-item">{{ taskGroup.displayName }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="offset-md-4"></div>      
             <div class="col-sm-12 col-md-4">
                 <div class="form-group">
                     <input type="text" spellcheck="false" autocomplete="false" [(ngModel)]="searchTerm" placeholder="Type to search" class="form-control form-control-lg"/>
@@ -9,16 +21,17 @@
             </div>
         </div>
         <div class="row mt-4">
-            <ng-container *ngFor="let board of boards">
-                <app-task-board 
-                    class="col-md-4" 
-                    [title]="board.title" 
-                    [priority]="board.priority" 
+            <ng-container *ngFor="let value of selectedTaskGroup.values; index as i">
+                <app-task-board class="col-md-4"
+                    [property]="selectedTaskGroup.propertyName"
+                    [value]="value"
+                    [title]="selectedTaskGroup.displayLabels[i]" 
+                    [displayPicture]="(selectedTaskGroup.displayPictures && selectedTaskGroup.displayPictures[i]) || ''" 
                     [filterTerm]="searchTerm">
-                </app-task-board>
-            </ng-container>
-        </div>
-    </ng-container>
+            </app-task-board>
+        </ng-container>
+    </div>
+</ng-container>
 </div>
 <ng-template #LoadingScreen>
     <div class="col-12 text-center text-light my-auto mx-auto">

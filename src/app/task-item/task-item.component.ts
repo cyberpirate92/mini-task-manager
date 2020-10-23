@@ -17,6 +17,7 @@ export class TaskItemComponent implements OnInit, OnChanges {
     public isLoading: boolean;
     public isOverdue: boolean;
     public userDisplayPicture: string;
+    public readonly priorities = this.taskManager.PRIORITIES;
     
     constructor(private taskManager: TaskManagerService, private userService: UsersService) { 
         this.onDelete = new EventEmitter();
