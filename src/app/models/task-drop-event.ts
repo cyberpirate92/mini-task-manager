@@ -1,4 +1,4 @@
-import { TaskBoard } from './task-board';
+import { TaskGroup } from './task-group';
 import { TaskItem } from './task-item';
 
 export interface TaskDropEvent {
@@ -10,5 +10,5 @@ export interface TaskDropEvent {
     /**
      * The board it has been dropped to
      */
-    board: TaskBoard;
+    board: TaskGroup;
 }

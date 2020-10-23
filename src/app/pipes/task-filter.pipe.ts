@@ -1,13 +1,22 @@
 import { Pipe } from "@angular/core";
 import { TaskItem } from '../models';
+import { DateUtils } from '../utils/date-utils';
 
 @Pipe({
     name: 'taskFilter'
 })
 export class TaskFilterPipe {
-    public transform(tasks: TaskItem[], filterString: string): TaskItem[] {
+    public transform(tasks: TaskItem[], filterString: string, dateRange: Date[] = []): TaskItem[] {
+        const isValidDateRange =  dateRange && dateRange.length >= 2 && DateUtils.isDate(dateRange[0]) && DateUtils.isDate(dateRange[1]);
+        console.log('is-valid-daterange', dateRange, isValidDateRange);
+        if (isValidDateRange) {
+            tasks = tasks.filter(x => x.due_date >= dateRange[0] && x.due_date <= dateRange[1]);
+        }
         filterString = filterString.trim().toLowerCase();
-        return tasks.filter(task => this.combineStrings(task).indexOf(filterString) >= 0);
+        if (filterString) {
+            tasks = tasks.filter(task => this.combineStrings(task).indexOf(filterString) >= 0);
+        }
+        return tasks;
     }
 
     /**
