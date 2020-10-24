@@ -12,6 +12,10 @@ export class StringUtils {
         if (isNaN(value)) {
             return value as any;
         }
+
+        if (typeof padCharacter !== 'string') {
+            padCharacter = '0';
+        }
         
         let valStr = value.toString();
         if (valStr.length >= length) {
@@ -19,6 +23,6 @@ export class StringUtils {
         }
         
         const padding = new Array(length - valStr.length);
-        return padding.fill(padCharacter).join('') + valStr;
+        return padding.fill(padCharacter.charAt(0)).join('') + valStr;
     }
 }

@@ -13,6 +13,6 @@ export class DateFormatPipe {
      * @returns formatted date string
      */
     public transform(date: Date, showTime: boolean = true): string {
-        return DateUtils.toDisplayFormat(date, showTime);
+        return date ? DateUtils.toDisplayFormat(date, showTime) : '';
     }
 }
