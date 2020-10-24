@@ -48,8 +48,8 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <button class="btn btn-secondary float-right" type="button" (click)="onCancelled()"><i class="fa fa-times"></i> Cancel</button>
-                    <button class="btn btn-success btn-success float-right mr-2" type="submit" [disabled]="!editForm.valid"><i class="fa fa-check"></i> Save</button>
+                    <button class="btn btn-secondary float-right" type="button" (click)="onCancelled()" [disabled]="isBeingSaved"><i class="fa fa-times"></i> Cancel</button>
+                    <button class="btn btn-success btn-success float-right mr-2" type="submit" [disabled]="!editForm.valid"><i class="fa" [ngClass]="isBeingSaved ? 'fa-spin fa-spinner' : 'fa-check'"></i> {{ isBeingSaved ? 'Saving' : 'Save' }}</button>
                 </div>
             </div>
         </form>

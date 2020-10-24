@@ -71,7 +71,7 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
         }
         try {
             let task = JSON.parse(event.dataTransfer.getData('task')) as TaskItem;
-            task.due_date = new Date(task.due_date);
+            task.due_date = task.due_date ? new Date(task.due_date) : null;
             task.created_on = new Date(task.created_on);
             if (task[this.property] !== this.value) {
                 task[this.property] = this.value;

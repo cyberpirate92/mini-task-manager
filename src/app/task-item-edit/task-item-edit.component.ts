@@ -26,6 +26,7 @@ export class TaskItemEditComponent implements OnInit {
     public users: User[];
     public selectedUser: User;
     public editForm: FormGroup;
+    public isBeingSaved: boolean;
     public readonly priorities = this.taskManager.PRIORITIES;
     
     constructor(private userService: UsersService, private taskManager: TaskManagerService) { 
@@ -33,6 +34,7 @@ export class TaskItemEditComponent implements OnInit {
         this.onSave = new EventEmitter();
         this.destroy$ = new Subject();
         this.users = [];
+        this.isBeingSaved = false;
         this.editForm = new FormGroup({
             message: new FormControl('', [Validators.required]),
             assigned_to: new FormControl('', [Validators.pattern(/^\d\d*$/)]),
@@ -69,7 +71,7 @@ export class TaskItemEditComponent implements OnInit {
                 assigned_name: user && user.name,
                 id: this.taskItem?.id || null,
             });
-            this.editForm.reset();
+            this.isBeingSaved = true;
         }
     }
 

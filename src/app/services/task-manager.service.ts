@@ -82,7 +82,7 @@ export class TaskManagerService {
         requestBody.set('message', task.message);
         requestBody.set('priority', task.priority?.toString() || '');
         requestBody.set('due_date', DateUtils.toRequestFormat(task.due_date) || '');
-        requestBody.set('assigned_to', task.assigned_to?.toString() || '');
+        requestBody.set('assigned_to', task.assigned_to ? task.assigned_to?.toString() : '');
         
         return this.httpClient.post<CreateTaskResponse>(`${this.API_URL}/create`, requestBody).pipe(tap({
             next: response => {

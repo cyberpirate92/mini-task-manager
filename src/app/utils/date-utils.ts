@@ -62,10 +62,10 @@ export class DateUtils {
      */
     public static toDisplayFormat(date: Date, shouldIncludeTime = true): string {
         if (!this.isDate(date)) {
-            return 'err';
+            return '';
         }
         const displayDate = `${StringUtils.pad(date.getDate())} ${this.monthNames[date.getMonth()].substr(0, 3)} ${date.getFullYear()}`;
-        const displayTime = `${date.getHours()}:${date.getMinutes()}`;
+        const displayTime = `${StringUtils.pad(date.getHours())}:${StringUtils.pad(date.getMinutes())}`;
         return shouldIncludeTime ? `${displayDate} ${displayTime}` : displayDate;
     }
 }
