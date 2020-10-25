@@ -1,6 +1,6 @@
 <app-task-item-edit *ngIf="inEditMode" [taskItem]="taskItem" (onCancel)="inEditMode=false" (onSave)="updateSelf($event)">
 </app-task-item-edit>
-<div *ngIf="!inEditMode" class="card task-card mt-3" [ngClass]="{ 'overdue' : isOverdue }" [draggable]="!isLoading" (dragstart)="onDragStart($event)" (dragend)="onDragComplete($event)" [attr.data-taskid]="taskItem.id">
+<div *ngIf="!inEditMode" class="card task-card mt-3" [ngClass]="{ 'overdue' : isOverdue }" [draggable]="!isLoading" (dragstart)="onDragStart($event)" (dragend)="onDragComplete($event)" [attr.data-taskid]="taskItem.id" @enterLeaveTransition>
     <div class="card-body" *ngIf="!isLoading; else Loader">
         <div class="card-title">
             <div class="row">

@@ -3,7 +3,7 @@
         <div class="card task-board mb-4" 
         (dragover)="onDragOver($event)" 
         (dragleave)="onDragLeave($event)" 
-        (drop)="onDropped($event)">
+        (drop)="onDropped($event)" @boardEnterLeaveAnimation>
             <div class="card-header">
                 <img [src]="displayPicture" class="display-picture" *ngIf="displayPicture">
                 <span class="board-title h5">
