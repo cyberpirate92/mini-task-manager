@@ -31,7 +31,7 @@ export class UsersService {
                     console.error(response.error || 'Fetching user list failed: Unknown error');
                 }
                 if (response?.users?.length > 0) {
-                    this.users$.next(response.users);
+                    this.users$.next(response.users.sort(this.sortByName));
                 }
             }, 
             error: (error: HttpErrorResponse) => {
@@ -46,5 +46,11 @@ export class UsersService {
     */
     public getUserById(id: number): User {
         return id ? this.users$.getValue().find(x => x.id == id.toString()) : null;
+    }
+
+    private sortByName(userA: User, userB: User): number {
+        if (userA.name > userB.name) return 1;
+        else if (userA.name === userB.name) return 0;
+        else return -1;
     }
 }

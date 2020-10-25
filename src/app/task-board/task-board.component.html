@@ -23,7 +23,7 @@
                     [property]="property"
                     [value]="value">
                 </app-task-item-edit>
-                <ng-container *ngFor="let task of filteredTasks">
+                <ng-container *ngFor="let task of filteredTasks; trackBy:identify">
                     <app-task-item [taskItem]="task"></app-task-item>
                 </ng-container>
             </div>

@@ -59,7 +59,7 @@ export class TaskManagerService {
                         t.priority = t.priority && parseInt(t.priority as any);
                         t.assigned_to = t.assigned_to && parseInt(t.assigned_to as any);
                         return t;
-                    }));
+                    }).sort(this.sortByDateAscending));
                 } else {
                     this.error$.next(response.error || 'Unknown error, please try reloading the page');
                 }
@@ -88,7 +88,7 @@ export class TaskManagerService {
             next: response => {
                 if (response.status === 'success') {
                     task.id = response.taskid;
-                    this.tasks$.next([task, ...this.tasks$.getValue()]);
+                    this.tasks$.next([task, ...this.tasks$.getValue()].sort(this.sortByDateAscending));
                 } else {
                     console.error('Task creation failed', response.error || response.message || 'Unknown error');
                 }
@@ -118,7 +118,7 @@ export class TaskManagerService {
                     if (updateIndex >= 0) {
                         taskList[updateIndex] = task;
                     }
-                    this.tasks$.next(taskList);
+                    this.tasks$.next(taskList.sort(this.sortByDateAscending));
                 } else {
                     console.error('Task update failed', response.error || 'Unknown error');
                 }
@@ -144,5 +144,11 @@ export class TaskManagerService {
                 }
             }
         }));
+    }
+
+    private sortByDateAscending(a: TaskItem, b: TaskItem): number {
+        if (a.due_date > b.due_date) return 1;
+        else if (a.due_date === b.due_date) return 0;
+        else return -1;
     }
 }

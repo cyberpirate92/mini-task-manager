@@ -105,6 +105,10 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
     }
+
+    public identify(index: number, taskItem: TaskItem) {
+        return taskItem.id;
+    }
     
     public ngOnDestroy(): void {
         this.destroy$.complete();
