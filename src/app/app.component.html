@@ -49,8 +49,11 @@
 </ng-container>
 </div>
 <ng-template #LoadingScreen>
-    <div class="col-12 text-center text-light my-auto mx-auto">
-        <p class="mt-4"><i class="fa fa-spin fa-spinner fa-3x"></i></p>
-        <p class="h3">Loading tasks, please wait</p>
+    <div class="d-flex align-items-center justify-content-center text-light h-100" @loadingScreenExit>
+        <div class="text-center">
+            <p class="mt-4"><i class="fa fa-spin fa-spinner fa-3x"></i></p>
+            <p class="mt-2 h3">"{{ loadingQuote.quote }}"</p>
+            <p class="mt-1 h5 font-italic"> - {{ loadingQuote.author }}</p>
+        </div>
     </div>
 </ng-template>

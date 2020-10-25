@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { transition, style, animate, trigger } from '@angular/animations';
+
 import { TaskItem } from '../models';
 import { TaskFilterPipe } from '../pipes/task-filter.pipe';
 import { TaskManagerService } from '../services/task-manager.service';
@@ -9,7 +11,21 @@ import { UsersService } from '../services/users.service';
 @Component({
     selector: 'app-task-board',
     templateUrl: './task-board.component.html',
-    styleUrls: ['./task-board.component.scss']
+    styleUrls: ['./task-board.component.scss'],
+    animations: [
+        trigger('boardEnterLeaveAnimation', [
+            transition(':enter', [
+                style({
+                    opacity: 0,
+                    transform: 'scale(0.75)'
+                }),
+                animate('0.25s', style({
+                    opacity: 1,
+                    transform: 'scale(1)'
+                }))
+            ])
+        ]),
+    ]
 })
 export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     
@@ -21,11 +37,11 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     @Input() filterDateRange: Date[]
     
     private _showCreateTaskCard: boolean;
-
+    
     public get showCreateTaskCard(): boolean {
         return this._showCreateTaskCard;
     }
-
+    
     public set showCreateTaskCard(value: boolean) {
         this._showCreateTaskCard = value;
         this.taskManager.pauseSync$.next(value);
@@ -48,8 +64,8 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
         this.taskManager.tasks$.pipe(takeUntil(this.destroy$)).subscribe({
             next: tasks => {
                 this.tasks = !!this.value 
-                    ? [...tasks.filter(task => task[this.property]==this.value)] 
-                    : [...tasks.filter(task => !task[this.property])];
+                ? [...tasks.filter(task => task[this.property]==this.value)] 
+                : [...tasks.filter(task => !task[this.property])];
                 this.applyFilter();
             }
         });
@@ -84,12 +100,12 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
             console.error(error);
         }
     }
-
+    
     public onDragOver(event: DragEvent) {
         event.preventDefault();
         this.hasDragOver = true;
     }
-
+    
     public onDragLeave(event: DragEvent) {
         this.hasDragOver = false;
     }
@@ -97,7 +113,7 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
     public newTask(): void {
         this.showCreateTaskCard = true;
     }
-
+    
     public createTask(task: TaskItem): void {
         this.taskManager.createTask(task).subscribe({
             next: _ => {
@@ -105,7 +121,7 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
     }
-
+    
     public identify(index: number, taskItem: TaskItem) {
         return taskItem.id;
     }
