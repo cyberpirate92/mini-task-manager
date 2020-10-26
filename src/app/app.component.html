@@ -36,7 +36,7 @@
         </div>    
         <div class="row mt-4 board-container justify-content-md-center">
             <ng-container *ngFor="let value of selectedTaskGroup.values; index as i">
-                <app-task-board class="col-sm-12 col-md-auto restrict-width-md"
+                <app-task-board class="col-sm-12 col-md-auto restrict-width full-height"
                 [property]="selectedTaskGroup.propertyName"
                 [value]="value"
                 [title]="selectedTaskGroup.displayLabels[i]" 
@@ -52,8 +52,8 @@
     <div class="d-flex align-items-center justify-content-center text-light h-100" @loadingScreenExit>
         <div class="text-center">
             <p class="mt-4"><i class="fa fa-spin fa-spinner fa-3x"></i></p>
-            <p class="mt-2 h3">"{{ loadingQuote.quote }}"</p>
-            <p class="mt-1 h5 font-italic"> - {{ loadingQuote.author }}</p>
+            <p class="mt-2 h3">"{{ loadingQuote?.quote || 'Loading, Please wait' }}"</p>
+            <p class="mt-1 h5 font-italic" *ngIf="loadingQuote"> - {{ loadingQuote.author }}</p>
         </div>
     </div>
 </ng-template>

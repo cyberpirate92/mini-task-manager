@@ -1,9 +1,10 @@
-<div class="row board-outline">
-    <div class="col-12">
-        <div class="card task-board mb-4" 
+<div class="row board-outline h-100">
+    <div class="col-12 full-height">
+        <div class="card task-board mb-4 h-100" 
         (dragover)="onDragOver($event)" 
         (dragleave)="onDragLeave($event)" 
-        (drop)="onDropped($event)" @boardEnterLeaveAnimation>
+        (drop)="onDropped($event)" 
+        @boardEnterLeaveAnimation>
             <div class="card-header">
                 <img [src]="displayPicture" class="display-picture" *ngIf="displayPicture">
                 <span class="board-title h5">
@@ -31,15 +32,17 @@
     </div>
 </div>
 <ng-template #NoTasks>
-    <div class="col-12 text-center mt-3 text-muted empty-state">
-        <p class="icon">
-            <i class="fa fa-folder-open-o fa-3x"></i>
-        </p>
-        <div class="message message-primary">
-            No tasks here
-        </div>
-        <div class="message message-secondary">
-            Click on the <i class="fa fa-plus"></i> icon to add tasks or drag one from another board
+    <div class="card-body">
+        <div class="text-center text-muted empty-state align-items-center justify-content-center h-100">
+            <p class="icon">
+                <i class="fa fa-folder-open-o fa-3x"></i>
+            </p>
+            <div class="message message-primary">
+                No tasks here
+            </div>
+            <div class="message message-secondary">
+                Click on the <i class="fa fa-plus"></i> icon to add tasks or drag one from another board
+            </div>
         </div>
     </div>
 </ng-template>

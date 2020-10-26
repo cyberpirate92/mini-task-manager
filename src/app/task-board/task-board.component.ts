@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { transition, style, animate, trigger } from '@angular/animations';
+import { transition, style, animate, trigger, state } from '@angular/animations';
 
 import { TaskItem } from '../models';
 import { TaskFilterPipe } from '../pipes/task-filter.pipe';
@@ -23,8 +23,14 @@ import { UsersService } from '../services/users.service';
                     opacity: 1,
                     transform: 'scale(1)'
                 }))
+            ]),
+            transition(':leave', [
+                animate('0.1s', style({
+                    opacity: 0,
+                    transform: 'scale(0.75)'
+                }))
             ])
-        ]),
+        ])
     ]
 })
 export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
@@ -90,7 +96,7 @@ export class TaskBoardComponent implements OnInit, OnChanges, OnDestroy {
             task.due_date = task.due_date ? new Date(task.due_date) : null;
             task.created_on = new Date(task.created_on);
             if (task[this.property] !== this.value) {
-                task[this.property] = this.value;
+                task[this.property] = this.value || null;
                 if (task.assigned_to) {
                     task.assigned_name = this.userService.getUserById(task.assigned_to).name;
                 }

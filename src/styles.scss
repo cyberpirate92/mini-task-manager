@@ -47,6 +47,8 @@ body {
     
     margin-top: 1rem;
     margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
     
     .message.message-primary {
         margin-top: 0.5rem;
@@ -102,13 +104,12 @@ body {
 .clickable {
     cursor: pointer;
 }
-@include respond-above(sm) {
-    .restrict-width-md {
-        max-width: 25%;
+.full-height {
+    align-items: stretch;
+}
+@include respond-above(md) {
+    .restrict-width {
+        max-width: 440px;
+        min-width: 440px;
     }
 }
-// .board-container {
-    //     display: flex;
-    //     overflow-x: auto;
-    //     flex-wrap: nowrap;
-    // }

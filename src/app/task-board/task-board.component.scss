@@ -1,9 +1,7 @@
-:host {
-    height: 100%;
-}
 .board-outline {
-    overflow-y: scroll;
-    overflow-x: auto;
+    overflow-y: hidden;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
 }
 .card-header {
     .badge {
@@ -13,9 +11,14 @@
 .card-body {
     padding-top:0.5rem;
     background-image: url("/assets/bg-texture.png");
+    background-position: 0 0;
+    transition: background 0.25s ease-in-out;
+}
+.card-body:hover {
+    background-position-x: 2%;
 }
 .task-board {
-    box-shadow: 0 0 10px 0 #333;
+    box-shadow: 0 2px 8px 0 #333;
     transition: 0.2s all ease-in-out;
 
     .display-picture {

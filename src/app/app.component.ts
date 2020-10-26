@@ -86,10 +86,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.selectedTaskGroup = this.taskGroups[0];
         this.filterDateRange = [];
-        this.loadingQuote = this.quoteService.getRandomQuote();
     }
     
     public ngOnInit(): void {
+        this.loadingQuote = this.quoteService.getRandomQuote();
         forkJoin([this.userService.fetchAll(), this.taskService.fetchAll()]).subscribe({
             next: _ => {
                 this.userService.users$.pipe(takeUntil(this.destroy$)).subscribe({
