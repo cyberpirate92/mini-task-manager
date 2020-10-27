@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12 text-left">
                     <ng-container *ngIf="taskItem.assigned_name; else NoAssignedName">
-                        <img [src]="userDisplayPicture" class="display-picture d-inline-block" />
+                        <img [src]="userDisplayPicture" class="display-picture d-inline-block" alt="User Display Picture" />
                         <div class="ml-2 text-muted font-weight-semi-bold d-inline-block" *ngIf="taskItem.assigned_name">{{ taskItem.assigned_name }}</div>
                     </ng-container>
                 </div>
